@@ -4,7 +4,7 @@ from telebot.types import Message
 import requests
 import restaurants
 
-bot = telebot.TeleBot("699888211:AAHL7pSV19gGWL5WkxXucax1_FXdZq8z5qg")
+bot = telebot.TeleBot('xxxk') #insert your bot token here
 
 chosen_rest = ""
 
