@@ -37,6 +37,19 @@ def show_descr(rest, item):
     return lst[0]
 
 
+def show_photo(rest, item):
+    conn = sqlite3.connect('menu.db')
+    c = conn.cursor()
+    queryvar = "SELECT picture FROM " + rest + " WHERE Dish =:dish"
+    c.execute(queryvar, {"dish" :item})
+    all = c.fetchall()
+    lst = list()
+    for e in all:
+        e = e[0]
+        lst.append(e)
+    return lst[0]
+
+
 def addtocart(id, item):
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
@@ -67,8 +80,9 @@ def send_order(id):
 def record_location(id,lat,lng):
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
-    
-    queryvar = "DELETE from cart WHERE user =:user"
+    queryvar = "SELECT Dish FROM cart WHERE user =:user"
+    users = []
+
 
 
 
@@ -85,6 +99,8 @@ class CartItem():
         self.amount = amount
     def add(name,amount):
         pass
+
+
 class Cart():
     def __init__(self,list):
         self.list = list

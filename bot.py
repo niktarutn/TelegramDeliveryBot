@@ -8,7 +8,7 @@ bot = telebot.TeleBot("699888211:AAHL7pSV19gGWL5WkxXucax1_FXdZq8z5qg")
 
 chosen_rest = ""
 
-@bot.message_handler(commands=["start"])
+@bot.message_handler(commands=["start"]) #initializes the start
 def handle_start(message):
     user_markup = telebot.types.ReplyKeyboardMarkup(True)
     user_markup.row('Start again')
@@ -29,7 +29,7 @@ def query_text(call):
                 keyboard = types.InlineKeyboardMarkup(row_width=2)
                 for rest in rest_list:
                     keyboard.add(types.InlineKeyboardButton(text=str(rest), callback_data=str(rest)))
-                bot.send_message(call.message.chat.id,"Choose the restaurant!",reply_markup=keyboard)
+                bot.send_message(call.message.chat.id,"Step 1: choose the restaurant!",reply_markup=keyboard)
 
         elif call.data in rest_list: #shows menu
                 global chosen_rest
@@ -38,8 +38,9 @@ def query_text(call):
                 keyboard = types.InlineKeyboardMarkup(row_width=2)
                 for item in food_list:
                     keyboard = types.InlineKeyboardMarkup(row_width=2)
-                    keyboard.add(types.InlineKeyboardButton(text='Add to Cart', callback_data=str(item)))
+                    keyboard.add(types.InlineKeyboardButton(text= 'Add 1 to the cart', callback_data=str(item)))
                     bot.send_message(call.message.chat.id,item)
+                    bot.send_photo(call.message.chat.id, restaurants.show_photo(chosen_rest,item))
                     bot.send_message(call.message.chat.id,restaurants.show_descr(chosen_rest,item),reply_markup=keyboard)
 
         elif call.data in restaurants.show_menu(chosen_rest): #adds items to the cart
@@ -49,11 +50,15 @@ def query_text(call):
             bot.send_message(call.message.chat.id,x)
 
         elif call.data == 'pay':
-            pass
+            keyboard = types.InlineKeyboardMarkup(row_width=1)
+            keyboard.add(types.InlineKeyboardButton(text="Confirm", callback_data='confirmed'))
+            bot.send_message(call.message.chat.id, "Click to pay and confirm the order", reply_markup=keyboard)
 
 @bot.message_handler(content_types=['location'])
 def handle_location(message):
-    
+    pass
+
+
 
 @bot.message_handler(commands=["checkout"]) #shows cart by user id
 def handle_start(message):
@@ -61,10 +66,10 @@ def handle_start(message):
     order = restaurants.showcart(message.from_user.id)
     bot.send_message(message.from_user.id, "Your order:")
     for item in order:
-            bot.send_message(message.from_user.id, item[0])
+        bot.send_message(message.from_user.id, item[0])
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     keyboard.add(types.InlineKeyboardButton(text='Confirm and pay', callback_data='pay'))
-    bot.send_message(call.message.chat.id,'Would you like to finish your order?',reply_markup=keyboard)
+    bot.send_message(message.chat.id,'Would you like to finish your order?',reply_markup=keyboard)
 
 
 @bot.message_handler(commands=["empty"]) #empties user's cart
@@ -79,6 +84,10 @@ def handle_text(message):
         bot.send_message(message.from_user.id, "Your order:")
         for item in order:
                 bot.send_message(message.from_user.id, item[0])
+        keyboard = types.InlineKeyboardMarkup(row_width=2)
+        keyboard.add(types.InlineKeyboardButton(text='Confirm and pay', callback_data='pay'))
+        bot.send_message(message.chat.id,'Would you like to finish your order?',reply_markup=keyboard)
+
     elif message.text=="Start again":
         handle_start(message)
 
