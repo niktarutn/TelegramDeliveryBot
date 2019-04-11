@@ -116,3 +116,10 @@ def show_status(id):
     queryvar = "SELECT status FROM Orders WHERE user =:user"
     c.execute(queryvar, {"user" :id})
     return (c.fetchall()[0][0])
+
+def delete_order(id):
+    conn = sqlite3.connect('menu.db')
+    c = conn.cursor()
+    queryvar = "DELETE from Orders WHERE user =:user"
+    c.execute(queryvar, {"user" :id})
+    conn.commit()

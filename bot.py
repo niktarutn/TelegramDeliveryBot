@@ -92,6 +92,7 @@ def handle_text(message):
 
     elif message.text=="Start again": #restarts user's interaction with bot
         handle_start(message)
+        restaurants.delete_order(message.from_user.id)
 
 
 if __name__ == '__main__':
