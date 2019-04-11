@@ -1,17 +1,5 @@
 import sqlite3
 
-def show_rests():
-    conn = sqlite3.connect('menu.db')
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table'")
-    all = c.fetchall()
-    lst = list()
-    for e in all:
-        e = e[0]
-        if e != "Cart":
-            lst.append(e)
-    return lst
-
 def show_menu():
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
@@ -23,6 +11,7 @@ def show_menu():
         e = e[0]
         lst.append(e)
     return lst
+
 
 def show_descr(item):
     conn = sqlite3.connect('menu.db')
@@ -36,6 +25,7 @@ def show_descr(item):
         lst.append(e)
     return lst[0]
 
+
 def show_price(item):
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
@@ -47,6 +37,7 @@ def show_price(item):
         e = e[0]
         lst.append(e)
     return lst[0]
+
 
 def show_photo(item):
     conn = sqlite3.connect('menu.db')
@@ -68,12 +59,14 @@ def addtocart(id, item, price):
     c.execute(queryvar, (id, item, price))
     conn.commit()
 
+
 def showcart(id):
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
     queryvar = "SELECT Dish FROM cart WHERE user =:user"
     c.execute(queryvar, {"user" :id})
     return c.fetchall()
+
 
 def summary(id):
     conn = sqlite3.connect('menu.db')
@@ -85,6 +78,7 @@ def summary(id):
         sum += item[0]
     return sum
 
+
 def empty_cart(id):
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
@@ -92,15 +86,33 @@ def empty_cart(id):
     c.execute(queryvar, {"user" :id})
     conn.commit()
 
+
 def save_order(id,status):
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
-    queryvar = "INSERT INTO orders VALUES(?,?)"
+    queryvar = "INSERT INTO orders(user,status) VALUES(?,?)"
     c.execute(queryvar, (id, status))
     conn.commit()
 
-def record_location(id,lat,lng):
+
+def location(id,loc):
     conn = sqlite3.connect('menu.db')
     c = conn.cursor()
-    queryvar = "SELECT Dish FROM cart WHERE user =:user"
-    users = []
+    #queryvar = "INSERT INTO orders(location) VALUES(?)"
+    queryvar = "UPDATE orders SET location = (?) WHERE user = (?)"
+    c.execute(queryvar,(loc,id))
+    conn.commit()
+
+def status(st,id):
+    conn = sqlite3.connect('menu.db')
+    c = conn.cursor()
+    queryvar = "UPDATE orders SET status = (?) WHERE user = (?)"
+    c.execute(queryvar,(st,id))
+    conn.commit()
+
+def show_status(id):
+    conn = sqlite3.connect('menu.db')
+    c = conn.cursor()
+    queryvar = "SELECT status FROM Orders WHERE user =:user"
+    c.execute(queryvar, {"user" :id})
+    return (c.fetchall()[0][0])
