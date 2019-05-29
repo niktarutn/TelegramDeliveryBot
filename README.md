@@ -8,5 +8,5 @@ Next features have been learnt during the project:
 * Basic usage of SQLite
 
 Future developing:
-*deployment
-*introducing a payment method
+* deployment
+* introducing a payment method
