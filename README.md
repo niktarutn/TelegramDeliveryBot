@@ -1,5 +1,5 @@
 # TelegramDeliveryBot
-## Food delivery bot for Telegram. Can be launched on the local machine, but needs a private bot token to be inserted to bot.py file. 
+Food delivery bot for Telegram. Can be launched on a local machine, but needs a private bot token to be inserted to bot.py file. 
 
 Next features have been learnt during the project:
 
